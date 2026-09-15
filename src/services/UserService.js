@@ -1,33 +1,156 @@
-import axios from 'axios';
+const STORAGE_KEY = "clinic_patient_data";
 
-const USER_API_BASE_URL = "http://localhost:9080/users";
+const initialUsers = [
+  {
+    id: 1,
+    nama: "Putri",
+    usia: 17,
+    jenis_kelamin: "P",
+    alamat: "Bandung",
+    deskripsi: "Sakit kepala"
+  },
+  {
+    id: 2,
+    nama: "Bayu",
+    usia: 21,
+    jenis_kelamin: "L",
+    alamat: "Cimahi",
+    deskripsi: "Demam"
+  },
+  {
+    id: 3,
+    nama: "Bunga",
+    usia: 20,
+    jenis_kelamin: "P",
+    alamat: "Bandung",
+    deskripsi: "Sakit mata"
+  }
+];
 
 class UserService {
+  getStoredUsers() {
+    const storedUsers = localStorage.getItem(STORAGE_KEY);
 
-    getUsers(){
-        return axios.get(USER_API_BASE_URL);
+    if (!storedUsers) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(initialUsers)
+      );
+
+      return initialUsers;
     }
 
-    createUser(user){
-        return axios.post(USER_API_BASE_URL, user);
-    }
+    return JSON.parse(storedUsers);
+  }
 
-    getUserById(userId){
-        return axios.get(USER_API_BASE_URL + '/' + userId);
-    }
+  saveUsers(users) {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(users)
+    );
+  }
 
-    updateUser(user, userId){
-        return axios.put(USER_API_BASE_URL + '/' + userId, user);
-    }
+  getUsers() {
+    const users = this.getStoredUsers();
 
-    deleteUser(userId){
-        return axios.delete(USER_API_BASE_URL + '/' + userId);
-    }
+    return Promise.resolve({
+      data: users
+    });
+  }
 
-    searchUsers(nama) {
-        return axios.get(`${USER_API_BASE_URL}?name=${nama}`);
-      }
+  createUser(user) {
+    const users = this.getStoredUsers();
 
+    const nextId =
+      users.length > 0
+        ? Math.max(...users.map((item) => Number(item.id))) + 1
+        : 1;
+
+    const newUser = {
+      ...user,
+      id: nextId
+    };
+
+    const updatedUsers = [
+      ...users,
+      newUser
+    ];
+
+    this.saveUsers(updatedUsers);
+
+    return Promise.resolve({
+      data: newUser
+    });
+  }
+
+  getUserById(userId) {
+    const users = this.getStoredUsers();
+
+    const user = users.find(
+      (item) => String(item.id) === String(userId)
+    );
+
+    return Promise.resolve({
+      data: user
+    });
+  }
+
+  updateUser(user, userId) {
+    const users = this.getStoredUsers();
+
+    const updatedUsers = users.map((item) =>
+      String(item.id) === String(userId)
+        ? {
+            ...user,
+            id: item.id
+          }
+        : item
+    );
+
+    this.saveUsers(updatedUsers);
+
+    const updatedUser = updatedUsers.find(
+      (item) => String(item.id) === String(userId)
+    );
+
+    return Promise.resolve({
+      data: updatedUser
+    });
+  }
+
+  deleteUser(userId) {
+    const users = this.getStoredUsers();
+
+    const updatedUsers = users.filter(
+      (item) => String(item.id) !== String(userId)
+    );
+
+    this.saveUsers(updatedUsers);
+
+    return Promise.resolve({
+      data: true
+    });
+  }
+
+  searchUsers(nama) {
+    const users = this.getStoredUsers();
+
+    const query = String(nama || "")
+      .trim()
+      .toLowerCase();
+
+    const filteredUsers = query
+      ? users.filter((user) =>
+          user.nama
+            .toLowerCase()
+            .includes(query)
+        )
+      : users;
+
+    return Promise.resolve({
+      data: filteredUsers
+    });
+  }
 }
 
 const userService = new UserService();
