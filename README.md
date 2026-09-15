@@ -1,24 +1,26 @@
 # Clinic Patient Management
 
-A full-stack web application for managing patient records in a community health clinic.
+A patient management web application built with React, featuring CRUD operations for managing patient records.
 
-This project was developed as an academic web programming project and demonstrates the implementation of a React-based user interface, client-side routing, API communication, and relational database integration.
+The project was originally developed as a full-stack academic web application with a Go REST API and MySQL/MariaDB database. For the public portfolio deployment, the application uses browser `localStorage` so the complete CRUD workflow can be explored without requiring an external backend service.
+
+**Live Demo:** https://clinic-patient-management-beta.vercel.app/
 
 ---
 
 ## Overview
 
-Clinic Patient Management provides a simple interface for managing patient information.
+Clinic Patient Management provides a simple web-based interface for managing patient information.
 
-The application allows patient records to be organized and accessed through a web-based interface, with data stored in a relational database.
-
-Each patient record contains information such as:
+Users can create, view, update, search, and delete patient records through a React interface. Each record contains basic patient information such as:
 
 - Name
 - Age
 - Gender
 - Address
 - Medical complaint or description
+
+The public portfolio version stores data locally in the user's browser, allowing the application to remain fully interactive without requiring a hosted database or backend server.
 
 ---
 
@@ -27,10 +29,31 @@ Each patient record contains information such as:
 - View patient records
 - Add new patient records
 - Edit existing patient information
+- Delete patient records
+- Search patients by name
 - View detailed patient information
-- Navigate between application pages using client-side routing
-- Store patient data in a MySQL/MariaDB database
-- Responsive interface using Bootstrap
+- Client-side routing using React Router
+- Browser-based data persistence using `localStorage`
+- Responsive user interface using Bootstrap
+
+---
+
+## Live Demo
+
+The application is deployed on Vercel:
+
+https://clinic-patient-management-beta.vercel.app/
+
+The live portfolio version uses browser `localStorage`.
+
+This means:
+
+- Data is stored locally in the user's browser
+- CRUD operations remain fully functional
+- Data is not shared between different users or devices
+- Clearing browser storage will remove locally stored records
+
+The original project also includes a Go REST API and MySQL/MariaDB database implementation in the repository.
 
 ---
 
@@ -44,12 +67,47 @@ Each patient record contains information such as:
 | HTTP Client | Axios |
 | UI Framework | Bootstrap |
 | Icons | Font Awesome |
-| Database | MySQL / MariaDB |
-| Database Administration | phpMyAdmin |
+| Demo Data Persistence | Browser Local Storage |
+| Original Backend | Go |
+| Original Database | MySQL / MariaDB |
+| Deployment | Vercel |
 
 ---
 
-## Application Structure
+## Application Architecture
+
+### Public Portfolio Demo
+
+```text
+User
+  |
+  v
+React Application
+  |
+  v
+CRUD Operations
+  |
+  v
+Browser Local Storage
+```
+
+### Original Full-Stack Implementation
+
+```text
+React Frontend
+      |
+      v
+Go REST API
+      |
+      v
+MySQL / MariaDB
+```
+
+The original backend implementation is preserved in the repository as part of the project's development history.
+
+---
+
+## Project Structure
 
 ```text
 clinic-patient-management/
@@ -59,25 +117,20 @@ clinic-patient-management/
 ├── src/
 ├── db_2205330_fatih_uas.sql
 ├── package.json
-└── package-lock.json
+├── package-lock.json
+└── README.md
 ```
 
 ### Main Components
 
 **`src/`**  
-Contains the React frontend and application components.
-
-The application includes pages for:
-
-- Listing patient records
-- Adding or editing patient information
-- Viewing patient details
+Contains the React frontend application, components, services, routing, and client-side logic.
 
 **`back-end_tubes/`**  
-Contains the backend implementation used to connect the application with the database.
+Contains the original Go backend implementation used to provide REST API endpoints for patient data.
 
 **`db_2205330_fatih_uas.sql`**  
-SQL database structure and sample data used by the application.
+Contains the original MySQL/MariaDB database structure and sample data.
 
 ---
 
@@ -87,27 +140,25 @@ SQL database structure and sample data used by the application.
 User
   |
   v
-React Interface
+Patient List
   |
-  v
-Patient Management
+  +---- Add Patient
   |
-  +---- View Records
-  |
-  +---- Add / Edit Records
+  +---- Search Patient
   |
   +---- View Patient Details
   |
-  v
-Backend
+  +---- Edit Patient
+  |
+  +---- Delete Patient
   |
   v
-MySQL / MariaDB Database
+Browser Local Storage
 ```
 
 ---
 
-## Frontend Setup
+## Running Locally
 
 Clone the repository:
 
@@ -128,33 +179,57 @@ Start the React development server:
 npm start
 ```
 
-The frontend will run locally using the React development server.
+The application will run locally using the React development server.
 
 ---
 
-## Database Setup
+## Data Persistence
 
-The repository includes:
+The public portfolio version uses the browser's `localStorage` API to persist patient records.
+
+Sample data is initialized automatically when the application is opened for the first time.
+
+Changes made through the application, including adding, editing, and deleting records, are stored in the user's browser.
+
+This implementation is intended specifically for demonstration and portfolio purposes.
+
+---
+
+## Original Backend and Database
+
+The original version of the project includes a Go REST API and MySQL/MariaDB database implementation.
+
+The backend source code is available in:
+
+```text
+back-end_tubes/
+```
+
+The original SQL database file is available as:
 
 ```text
 db_2205330_fatih_uas.sql
 ```
 
-Import this file into a MySQL or MariaDB database using phpMyAdmin or another compatible database management tool.
-
-The database contains the patient table used by the application.
-
-Backend database configuration may need to be adjusted according to your local environment.
+These files are retained to demonstrate the original full-stack architecture of the project.
 
 ---
 
 ## Project Context
 
-This project was developed as part of an academic web programming course.
+This project was originally developed as part of an academic web programming course.
 
-The main objective was to practice building a web application that combines a React frontend with backend and relational database operations.
+The project provided practical experience with:
 
-Through this project, I worked with component-based frontend development, routing, HTTP requests, CRUD-oriented application flows, and database integration.
+- Component-based frontend development using React
+- Client-side routing
+- CRUD application workflows
+- REST API communication
+- Relational database integration
+- Separating frontend, backend, and database responsibilities
+- Deploying a frontend application for public access
+
+For the portfolio version, the frontend was adapted to use browser-based persistence so the application can remain publicly accessible without relying on a paid backend or database service.
 
 ---
 
